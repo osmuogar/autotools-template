@@ -5,6 +5,8 @@ EXTRA_DIST =
 # Auto configure local Automake flags.
 ACLOCAL_AMFLAGS=-I m4
 
+man1_MANS = man/my_program.man
+
 # Enables code coverage.
 include Makefile.coverage.am
 
