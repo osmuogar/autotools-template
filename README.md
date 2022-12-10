@@ -20,10 +20,10 @@ Short_description
 
 Developing:
 
-* automake >= 2.57
-* autoconf >= 1.7
-* libtool >= 1.4.2
-* pkg-config >= 0.20
+* automake >= 1.16.5
+* autoconf >= 2.71.0
+* pkg-config >= 1.8.0
+* clang-format >= 14.0.6
 
 Testing dependencies:
 
@@ -31,7 +31,7 @@ Testing dependencies:
 
 Code coverage:
 
-* lcov >= 1.14
+* lcov >= 1.14.0
 
 Debugging:
 
@@ -40,7 +40,7 @@ Debugging:
 
 ## 2. Install.
 
-You can install my_program with the following set of instructions:
+Run the following set of instructions:
 
 ```bash
 autoreconf --install
@@ -53,16 +53,7 @@ sudo ldconfig
 
 ## 3. Uninstall.
 
-You can install my_program with the following set of instructions:
-
-```bash
-autoreconf --install
-./configure
-make
-make check
-make install
-sudo ldconfig
-```
+Run `make uninstall`.
 
 ## 4. Execution.
 
@@ -70,7 +61,6 @@ Run `make start`.
 
 ## 5. Directories.
 
-* doc: Project documentation.
 * include: header files.
 * m4: m4 files.
 * src: source files.
@@ -80,7 +70,7 @@ Run `make start`.
 
 ### 6.1. Finding dependencies.
 
-The following instruction shows all dependencies to be added to configure.ac.
+The following instruction shows all dependencies to be added to `configure.ac`.
 
 ```bash
 autoscan # Used to generate a preliminary configure.ac
@@ -92,21 +82,21 @@ Run `make lint`.
 
 ### 6.2. Debugging.
 
-Valgrind (https://www.valgrind.org/) is a took to check for memory leaks and
-other troubles in C. You can enable valgrind win the project with
+[Valgrind](https://www.valgrind.org/) checks for memory leaks and other troubles
+in C. You can enable valgrind in the project with
 `./configure --enable-valgrind`. There are predefined rules to run valgrind in
 execution, i.e., `make start-valgrind` or tests, i.e., `make check-valgrind`.
 Results are outputed in the `tests` folder.
 
 For general debugging set the configuration of the project
-(+info: https://stackoverflow.com/a/4680578/8682584):
+([more info](https://stackoverflow.com/a/4680578/8682584)):
 
 ```bash
 ./configure CPPFLAGS=-DDEBUG CFLAGS="-g -O0"
 ```
 
 run the debugger
-(+info: https://www.gnu.org/software/libtool/manual/html_node/Debugging-executables.html):
+[more info](https://www.gnu.org/software/libtool/manual/html_node/Debugging-executables.html):
 
 ```bash
 ./libtool --mode=execute gdb src/my_program
@@ -124,11 +114,8 @@ run the debugger
     current line.
 * 'run' executes my_program, accepting args as space separated values.
 * 'break' sets a breakpoint.
-* 'continue'.
+* 'continue' continues the execution.
 * 'print <variable>' prints the variable.
-
-> NOTE: To debug a test case uncomment the line
-> `srunner_set_fork_status(sr, CK_NOFORK);` in tests/test.c.
 
 To quickly check for a bug, commands can be written as aguments such as:
 
@@ -150,14 +137,12 @@ Run `make check`.
 ### 7.1. Code coverage.
 
 Generates a folder containing the summary of the code coverage of the project.
-It is recommended to clean project object files with `make clean` before and
+It is recommended to clean project object files with `git clean -xdf` before and
 after generating the code coverage report. This is due to the compiler options
 to optimize code; code coverage requires no optimization.
 
 ```bash
-make clean
 make coverage
-make clean
 ```
 
 ## 8. Distribution.
