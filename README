@@ -1,28 +1,22 @@
-################################################################################
-####################                my_program              ####################
-################################################################################
+# my_program
 
-[Short description.]
+Short_description
 
-################################################################################
-# Table of contents.
-################################################################################
+## Table of contents.
 
-1. Dependencies.
-2. Installation.
-3. Uninstall.
-4. Execution.
-5. Directories.
-6. Developing.
-    6.1. Finding dependencies.
-    6.2. Debugging.
-7. Testing.
-    7.1. Code coverage.
-8. Distribution.
+1. [Dependencies.](#1-dependencies)
+2. [Installation.](#2-install)
+3. [Uninstall.](#3-uninstall)
+4. [Execution.](#4-execution)
+5. [Directories.](#5-directories)
+6. [Development.](#6-development)
+    1. [Finding dependencies.](#61-finding-dependencies)
+    2. [Debugging.](#62-debugging)
+7. [Testing.](#7-testing)
+    1. [Code coverage.](#71-code-coverage)
+8. [Distribution.](#8-distribution)
 
-################################################################################
-# 1. Dependencies.
-################################################################################
+## 1. Dependencies.
 
 Developing:
 
@@ -44,9 +38,7 @@ Debugging:
 * gdb >= 10.1.90.20210103-git
 * valgrind >= 3.18.1
 
-################################################################################
-# 2. Install.
-################################################################################
+## 2. Install.
 
 You can install my_program with the following set of instructions:
 
@@ -59,9 +51,7 @@ make install
 sudo ldconfig
 ```
 
-################################################################################
-# 3. Uninstall.
-################################################################################
+## 3. Uninstall.
 
 You can install my_program with the following set of instructions:
 
@@ -74,19 +64,11 @@ make install
 sudo ldconfig
 ```
 
-################################################################################
-# 4. Execution.
-################################################################################
+## 4. Execution.
 
-You can execute my_program with the following set of instructions:
+Run `make start`.
 
-```bash
-make start
-```
-
-################################################################################
-# 5. Directories.
-################################################################################
+## 5. Directories.
 
 * doc: Project documentation.
 * include: header files.
@@ -94,13 +76,9 @@ make start
 * src: source files.
 * tests: test files.
 
-################################################################################
-# 6. Developing.
-################################################################################
+## 6. Development.
 
-########################################
-# 6.1. Finding dependencies.
-########################################
+### 6.1. Finding dependencies.
 
 The following instruction shows all dependencies to be added to configure.ac.
 
@@ -108,9 +86,11 @@ The following instruction shows all dependencies to be added to configure.ac.
 autoscan # Used to generate a preliminary configure.ac
 ```
 
-########################################
-# 6.2. Debugging.
-########################################
+### 6.2. Linting.
+
+Run `make lint`.
+
+### 6.2. Debugging.
 
 Valgrind (https://www.valgrind.org/) is a took to check for memory leaks and
 other troubles in C. You can enable valgrind win the project with
@@ -163,15 +143,11 @@ To quickly check for a bug, commands can be written as aguments such as:
 src/my_program
 ```
 
-################################################################################
-# 7. Testing.
-################################################################################
+## 7. Testing.
 
 Run `make check`.
 
-########################################
-# 7.1. Code coverage.
-########################################
+### 7.1. Code coverage.
 
 Generates a folder containing the summary of the code coverage of the project.
 It is recommended to clean project object files with `make clean` before and
@@ -184,9 +160,7 @@ make coverage
 make clean
 ```
 
-################################################################################
-# 8. Distribution.
-################################################################################
+## 8. Distribution.
 
 Generates a tar file ready to distribute.
 
