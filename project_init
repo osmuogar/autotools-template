@@ -105,6 +105,7 @@ mv include/my_program include/${PROJECT_NAME}
 mv src/my_program.c src/${PROJECT_NAME}.c
 mv tests/my_program_test.c tests/${PROJECT_NAME}_test.c
 mv tests/my_program_test.supp tests/${PROJECT_NAME}_test.supp
+mv man/my_program.man man/${PROJECT_NAME}.man
 
 echo -e "\e[32m>\e[0m Finished project initialization.";
 

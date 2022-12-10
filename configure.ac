@@ -59,6 +59,24 @@ AC_PROG_MAKE_SET
 dnl ############################################################################
 dnl Configuration flags.
 dnl ############################################################################
+dnl Check for doxygen.
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+if test -z "$DOXYGEN"; then
+   AC_MSG_WARN([Unable to find Doxygen.])
+fi
+dnl Check for dot.
+AC_CHECK_PROGS([DOT], [dot])
+if test -z "$DOT"; then
+   AC_MSG_ERROR([Unable to find dot, needed by Doxygen.])
+fi
+dnl Check for pdflatex.
+AC_CHECK_PROGS([PDFLATEX], [pdflatex])
+if test -z "$PDFLATEX"; then
+   AC_MSG_ERROR([Unable to find pdflatex, needed by Doxygen.])
+fi
+dnl Set variable as result of checking for doxygen.
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
+
 dnl Adds feature as a configuration flag.
 AC_ARG_ENABLE([MY_FEATURE], dnl feature.
     dnl help-string.
@@ -114,6 +132,9 @@ AC_CHECK_FUNCS([strerror])
 dnl ############################################################################
 dnl Config files.
 dnl ############################################################################
+dnl If doxygen is available, add DoxyFile in doc folder.
+AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([Doxyfile])])
+
 dnl Make AC_OUTPUT create each file by copying an input file (by default
 dnl file.in), substituting the output variable values.
 AC_CONFIG_FILES([
@@ -131,6 +152,13 @@ if test "x$enable_my_feature" == "xyes"; then
   MY_FEATURE="yes"
   else
   MY_FEATURE="no"
+fi
+
+dnl Report if user manual is available.
+if test "x$DOXYGEN" == "xdoxygen"; then
+  user_manual="yes"
+  else
+  user_manual="no"
 fi
 
 dnl Prints selected configuration.

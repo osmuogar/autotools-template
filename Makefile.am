@@ -8,6 +8,33 @@ ACLOCAL_AMFLAGS=-I m4
 # Enables code coverage.
 include Makefile.coverage.am
 
+if HAVE_DOXYGEN
+
+# Command man page.
+man1_MANS = documentation/man/man1/my_program.1
+
+# Library man page.
+man3_MANS = documentation/man/man3/my_program_configuration.3
+
+# Generate documentation.
+.PHONY: doc
+doc: $(man3_MANS) documentation/html/ documentation/latex/
+
+# Man page.
+$(man3_MANS):
+	$(DOXYGEN) Doxyfile
+
+# Documentation in HTML format.
+documentation/html/:
+	$(DOXYGEN) Doxyfile
+
+# Documentation in LaTeX format.
+documentation/latex/:
+	$(DOXYGEN) Doxyfile
+	cd documentation/latex && $(MAKE)
+
+endif
+
 # Starts my_program.
 .PHONY: start
 start: all
