@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Clean user input.
+# Clean name.
 # @param input.
-function clean_input(){    
+function clean_name(){    
     local -n ref=$1; # Obtain the value of the pointed variable.
 
     text=${ref}; # Obtain the value of the referenced variable
@@ -17,10 +17,25 @@ function clean_input(){
     return 0;
 }
 
-# Confirms project name.
-function confirm_project_name(){
+# Clean description.
+# @param input.
+function clean_description(){    
+    local -n ref=$1; # Obtain the value of the pointed variable.
+
+    text=${ref}; # Obtain the value of the referenced variable
+    # Clean out slash.
+    text=${text//[\/]/};
+    
+    ref=${text}; # Copy handled text to pointed variable.
+
+    return 0;
+}
+
+# Project data confirmation.
+function confirm_project_data(){
     echo -e "\e[32m>\e[0m Project configuration is:"
     echo -e "\e[32m>\e[0m \tProject name: "${PROJECT_NAME}
+    echo -e "\e[32m>\e[0m \tProject description: "${PROJECT_DESCRIPTION}
     echo -e "\e[32m>\e[0m \tDeveloper mail: "${MAIL}
     echo -en "\e[32m>\e[0m Is it correct? \e[2m(y/N)\e[0m ";
     read bool;
@@ -37,75 +52,52 @@ function confirm_project_name(){
     esac
 }
 
-# Replace common file project name.
-# @param file.
-function replace_project_name_in_file(){
-    sed -i 's/my_program/'${PROJECT_NAME}'/g' $1;
-    sed -i 's/My_program/'${PROJECT_NAME^}'/g' $1;
-    sed -i 's/MY_PROGRAM/'${PROJECT_NAME^^}'/g' $1;
-}
-
-# Replace project name in Makefile.am.
-# @param file.
-function handle_makefile(){
-    sed -i 's/my_program/'${PROJECT_NAME}'/g' $1;
-    sed -i 's/TEST_MY_PROGRAM/TEST_'${PROJECT_NAME}'/g' $1;
-    sed -i 's/libmy_program/lib'${PROJECT_NAME}'/g' $1;
-}
-
-# Replace mail.
-# @param file.
-function replace_mail(){
-    sed -i 's/user@mail.com/'${MAIL}'/g' $1;
-}
-
 # Check if name is given as argument.
 if [ "$1" == "" ] ; then
     # Request project name.
     echo -en "\e[32m>\e[0m Introduce the name of the project: ";
     read PROJECT_NAME; # Read from input.
 
+    # Request project description.
+    echo -en "\e[32m>\e[0m Introduce a short description of the project: ";
+    read PROJECT_DESCRIPTION; # Read from input.
+
     # Request project author mail.
     echo -en "\e[32m>\e[0m Introduce the mail of the author: ";
     read MAIL; # Read from input.
 else
-    PROJECT_NAME=${@:1:$#-1}; # Set arguments as project name.
-    MAIL=${@:$#}; # Set mail.
+    PROJECT_NAME=${@:1:$#-2}; # Take project name from arguments.
+    PROJECT_DESCRIPTION=${@:2:$#-2}; # Take project description from arguments.
+    MAIL=${@:$#}; # Take developer mail from arguments.
 fi;
 
-clean_input PROJECT_NAME; # Clean user input. Passing var as reference.
+# Clean project name
+clean_name PROJECT_NAME;
 
-# Confirm project name.
-confirm_project_name ${PROJECT_NAME};
+# Clean project description
+clean_description PROJECT_DESCRIPTION;
+
+# Check mail format
+MAIL_REGEX="^[a-z0-9!#\$%&'*+/=?^_\`{|}~-]+(\.[a-z0-9!#$%&'*+/=?^_\`{|}~-]+)*@([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]([a-z0-9-]*[a-z0-9])?\$"
+if ! [[ ${MAIL} =~ ${MAIL_REGEX} ]] ; then
+    echo "Wrong mail format: " ${MAIL}
+    exit 1;
+fi
+
+# Confirm project data.
+confirm_project_data ${PROJECT_NAME};
 
 echo -e "\e[32m>\e[0m Initializing project "${PROJECT_NAME}".";
 
-# Handle makefiles.
-handle_makefile include/my_program/Makefile.am;
-handle_makefile include/Makefile.am;
-handle_makefile src/Makefile.am;
-handle_makefile tests/Makefile.am;
-handle_makefile Makefile.am;
+# Replace name in all files.
+find . -type f -exec \
+    sed -i 's/[mM][yY]_[pP][rR][oO][gG][rR][aA][mM]/'${PROJECT_NAME}'/g' {} \;
 
-# Handle common files.
-replace_project_name_in_file include/my_program/my_program.h;
-replace_project_name_in_file include/my_program/common.h;
-replace_project_name_in_file include/my_program/util.h;
-replace_project_name_in_file src/common.c;
-replace_project_name_in_file src/main.c;
-replace_project_name_in_file src/my_program.c;
-replace_project_name_in_file src/util.c;
-replace_project_name_in_file tests/my_program_test.c;
-replace_project_name_in_file tests/my_program_test.supp;
-replace_project_name_in_file tests/util_test.c;
-replace_project_name_in_file tests/util_test.supp;
-replace_project_name_in_file .gitignore;
-replace_project_name_in_file configure.ac;
-replace_project_name_in_file README;
-replace_project_name_in_file TODO;
+# Replace description.
+sed -i 's/Short_description/'"${PROJECT_DESCRIPTION}"'/g' README.md;
 
 # Replace mail.
-replace_mail configure.ac;
+sed -i 's/user@mail.com/'${MAIL}'/g' configure.ac;
 
 # Rename files and folders.
 mv include/my_program/my_program.h include/my_program/${PROJECT_NAME}.h
