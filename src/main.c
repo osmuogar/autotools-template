@@ -94,7 +94,7 @@ struct argp argp = {
     .argp_domain = NULL};
 
 /**
- * @brief Generates a command for my_program.
+ * Generates a command for my_program.
  *
  * @param argc Num of arguments.
  * @param argv Vector of arguments.

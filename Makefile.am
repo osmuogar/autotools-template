@@ -10,6 +10,11 @@ man1_MANS = man/my_program.man
 # Enables code coverage.
 include Makefile.coverage.am
 
+# Generates documentation.
+.PHONY: doc
+doc: all
+	cd doc && $(MAKE)
+
 # Starts my_program.
 .PHONY: start
 start: all
